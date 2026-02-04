@@ -1,0 +1,435 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>💖 Valentine</title>
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap"
+      rel="stylesheet"
+    />
+
+    <style>
+      * {
+        box-sizing: border-box;
+        font-family: "Poppins", sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #ff9a9e, #fad0c4);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        text-align: center;
+        overflow: hidden;
+      }
+
+      .card {
+        background: #fff;
+        padding: 2.5rem 2rem;
+        border-radius: 20px;
+        max-width: 500px;
+        width: 90%;
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+        animation: pop 0.8s ease;
+      }
+
+      @keyframes pop {
+        from {
+          transform: scale(0.85);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      h1 {
+        font-size: 1.8rem;
+        margin-bottom: 1rem;
+      }
+
+      p {
+        font-size: 1rem;
+        margin-bottom: 1.2rem;
+      }
+
+      input {
+        padding: 0.7rem 1rem;
+        font-size: 1rem;
+        border-radius: 10px;
+        border: 1px solid #ddd;
+        width: 80%;
+        text-align: center;
+        outline: none;
+      }
+
+      .error {
+        color: #ff4d6d;
+        font-size: 0.9rem;
+        margin-top: 0.6rem;
+      }
+
+      .meme-img {
+        width: 120px;
+        border-radius: 14px;
+      }
+
+      .meme-img-lg {
+        width: 250px;
+        border-radius: 14px;
+      }
+
+      .buttons {
+        display: flex;
+        justify-content: center;
+        gap: 1rem;
+        margin-top: 1rem;
+        flex-wrap: wrap;
+      }
+
+      button {
+        border: none;
+        padding: 0.8rem 1.6rem;
+        border-radius: 999px;
+        font-size: 1rem;
+        cursor: pointer;
+        transition: 0.3s;
+        white-space: nowrap;
+      }
+
+      #yesBtn {
+        background: #ff4d6d;
+        color: #fff;
+      }
+
+      #yesBtn:hover {
+        transform: scale(1.1);
+      }
+
+      #noBtn {
+        background: #eee;
+        color: #555;
+      }
+
+      .hidden {
+        display: none;
+      }
+
+      .typing {
+        font-weight: 600;
+        color: #ff4d6d;
+      }
+
+      .stamp {
+        margin-top: 1rem;
+        padding: 0.4rem 0.8rem;
+        background: #ff4d6d;
+        color: #fff;
+        font-size: 0.8rem;
+        border-radius: 8px;
+        display: inline-block;
+        transform: rotate(-5deg);
+      }
+
+      @keyframes shake {
+        0% {
+          transform: translateX(0);
+        }
+        25% {
+          transform: translateX(-6px);
+        }
+        50% {
+          transform: translateX(6px);
+        }
+        75% {
+          transform: translateX(-6px);
+        }
+        100% {
+          transform: translateX(0);
+        }
+      }
+
+      .shake {
+        animation: shake 0.4s;
+      }
+
+      @keyframes fadeOut {
+        to {
+          opacity: 0;
+        }
+      }
+
+      .fade-out {
+        animation: fadeOut 1s forwards;
+      }
+
+      @keyframes imgPop {
+        from {
+          transform: scale(0.7);
+          opacity: 0;
+        }
+        to {
+          transform: scale(1);
+          opacity: 1;
+        }
+      }
+
+      .hearts span {
+        position: fixed;
+        bottom: -20px;
+        animation: floatUp linear infinite;
+      }
+
+      @keyframes floatUp {
+        to {
+          transform: translateY(-120vh);
+          opacity: 0;
+        }
+      }
+
+      .firework {
+        position: fixed;
+        font-size: 1.8rem;
+        animation: explode 1.2s ease-out forwards;
+      }
+
+      @keyframes explode {
+        to {
+          transform: scale(2);
+          opacity: 0;
+        }
+      }
+
+      .typing-love {
+        font-size: 1.05rem;
+        font-weight: 500;
+        color: #ff4d6d;
+      }
+    </style>
+  </head>
+
+  <body>
+    <audio
+      id="bgMusic"
+      src="assets/music/Glue_Song_Sped_Up.mp3"
+      preload="auto"
+      loop
+    ></audio>
+
+    <!-- PASSWORD CARD -->
+    <div class="card" id="passwordCard">
+      <h1>🔐 One small thing…</h1>
+      <p>Enter the special date to continue 💗</p>
+      <input id="passwordInput" placeholder="DD/MM/YYYY" />
+      <div class="buttons">
+        <button id="unlockBtn">Unlock 💖</button>
+      </div>
+      <div class="error hidden" id="passwordError">
+        Hmm… that doesn’t feel right 🥲
+      </div>
+    </div>
+
+    <!-- INTRO CARD -->
+    <div class="card hidden" id="intro">
+      <img id="memeImg" class="meme-img" src="assets/img/love.png" />
+      <h1>Hey <span class="typing" id="name"></span> 🥺</h1>
+      <p id="line1"></p>
+      <p id="line2"><strong></strong></p>
+
+      <div class="buttons">
+        <button id="yesBtn">YES 💖</button>
+        <button id="noBtn">No 🙃</button>
+      </div>
+    </div>
+
+    <div class="card hidden" id="loading">
+      <h1>Processing… ⏳</h1>
+      <p id="loader">Loading happiness… 0%</p>
+    </div>
+
+    <div class="card hidden" id="success">
+      <img class="meme-img-lg" src="assets/img/together.png" />
+      <h1>YAYYYY 💕</h1>
+      <p class="typing-love" id="loveText"></p>
+      <div class="stamp">📸 Screenshot proof 😌</div>
+    </div>
+
+    <div class="hearts" id="hearts"></div>
+
+    <script>
+      const CORRECT_PASSWORD = "13/10/2002";
+      const fullName = "Aniksha";
+
+      const music = document.getElementById("bgMusic");
+      const passwordCard = document.getElementById("passwordCard");
+      const passwordInput = document.getElementById("passwordInput");
+      const unlockBtn = document.getElementById("unlockBtn");
+      const passwordError = document.getElementById("passwordError");
+
+      const intro = document.getElementById("intro");
+      const loading = document.getElementById("loading");
+      const success = document.getElementById("success");
+
+      const memeImg = document.getElementById("memeImg");
+      const yesBtn = document.getElementById("yesBtn");
+      const noBtn = document.getElementById("noBtn");
+
+      const nameEl = document.getElementById("name");
+      const line1 = document.getElementById("line1");
+      const line2Strong = document.querySelector("#line2 strong");
+
+      const line1Text = "I have a very serious question for you…";
+      const line2Text = "Will you be my Valentine? 💘";
+
+      const noSteps = [
+        ["You mis-clicked, right? 😅", "misclick.png"],
+        ["Do you find me ugly? 🥲", "ugly.png"],
+        ["Are you sureeee? 😳", "sure.png"],
+        ["Second chances? 🙏", "second.png"],
+        ["This button hurts my feelings 😤", "buttonhurt.png"],
+        ["Think again… carefully 😌", "thinkagn.png"],
+        ["This is getting awkward…", "awkward.png"],
+        ["Last warning 😠 (not really)", "last.png"],
+        ["Okay now you're just teasing me 😩", "teasing.png"],
+      ];
+
+      const smirkImage = "assets/img/smirk.png";
+
+      const loveMessage =
+        "We already have something beautiful — this is just my promise to keep choosing you every single day. We’re already a team… this is just my slightly dramatic way of reminding you that I’m lucky to have you. This Valentine’s Day isn’t about asking you — it’s about celebrating how lucky I am to have you. ❤️💘";
+
+      let noIndex = 0;
+      let musicStarted = false;
+
+      function startMusicOnce() {
+        if (musicStarted) return;
+        music.volume = 0;
+        music.play().then(() => {
+          let v = 0;
+          const fade = setInterval(() => {
+            v += 0.05;
+            music.volume = Math.min(v, 0.75);
+            if (v >= 0.75) clearInterval(fade);
+          }, 120);
+        });
+        musicStarted = true;
+      }
+
+      unlockBtn.onclick = () => {
+        if (passwordInput.value.trim() === CORRECT_PASSWORD) {
+          passwordCard.classList.add("hidden");
+          intro.classList.remove("hidden");
+          startMusicOnce();
+          startIntroTyping();
+        } else {
+          passwordError.classList.remove("hidden");
+          passwordError.classList.add("shake");
+          setTimeout(() => passwordError.classList.remove("shake"), 400);
+        }
+      };
+
+      function startIntroTyping() {
+        let n = 0;
+        const nameInterval = setInterval(() => {
+          nameEl.textContent += fullName[n++];
+          if (n === fullName.length) clearInterval(nameInterval);
+        }, 250);
+
+        setTimeout(() => {
+          typeText(line1, line1Text, 100, () => {
+            setTimeout(() => {
+              typeText(line2Strong, line2Text, 100);
+            }, 850);
+          });
+        }, 1800);
+      }
+
+      function typeText(el, text, speed, callback) {
+        let i = 0;
+        const interval = setInterval(() => {
+          el.textContent += text[i++];
+          if (i === text.length) {
+            clearInterval(interval);
+            if (callback) callback();
+          }
+        }, speed);
+      }
+
+      noBtn.onclick = () => {
+        if (noIndex < noSteps.length) {
+          noBtn.textContent = noSteps[noIndex][0];
+          memeImg.src = "assets/img/" + noSteps[noIndex][1];
+          memeImg.style.animation = "imgPop 0.4s ease";
+          noBtn.classList.add("shake");
+          setTimeout(() => noBtn.classList.remove("shake"), 400);
+          noIndex++;
+        } else {
+          noBtn.classList.add("fade-out");
+          setTimeout(() => {
+            noBtn.style.display = "none";
+            memeImg.src = smirkImage;
+            memeImg.style.animation = "imgPop 0.4s ease";
+            yesBtn.style.transform = "scale(1.25)";
+          }, 1200);
+        }
+      };
+
+      yesBtn.onclick = () => {
+        intro.classList.add("hidden");
+        loading.classList.remove("hidden");
+
+        let p = 0;
+        const load = setInterval(() => {
+          p += 10;
+          loader.textContent = `Loading happiness… ${p}%`;
+          if (p === 100) {
+            clearInterval(load);
+            loading.classList.add("hidden");
+            success.classList.remove("hidden");
+            typeLove();
+            heartsStart();
+            fireworks();
+          }
+        }, 250);
+      };
+
+      function typeLove() {
+        let i = 0;
+        const t = setInterval(() => {
+          loveText.textContent += loveMessage[i++];
+          if (i === loveMessage.length) clearInterval(t);
+        }, 45);
+      }
+
+      function heartsStart() {
+        setInterval(() => {
+          const s = document.createElement("span");
+          s.textContent = ["❤️", "💖", "✨", "💘"][
+            Math.floor(Math.random() * 4)
+          ];
+          s.style.left = Math.random() * 100 + "vw";
+          s.style.animationDuration = "4s";
+          hearts.appendChild(s);
+          setTimeout(() => s.remove(), 4000);
+        }, 200);
+      }
+
+      function fireworks() {
+        setInterval(() => {
+          const f = document.createElement("div");
+          f.className = "firework";
+          f.textContent = "🎆";
+          f.style.left = Math.random() * 100 + "vw";
+          f.style.top = Math.random() * 60 + "vh";
+          document.body.appendChild(f);
+          setTimeout(() => f.remove(), 1200);
+        }, 800);
+      }
+    </script>
+  </body>
+</html>
